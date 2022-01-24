@@ -55,7 +55,7 @@ class Blockchain {
    * or reject if an error happen during the execution.
    * You will need to check for the height to assign the `previousBlockHash`,
    * assign the `timestamp` and the correct `height`...At the end you need to
-   * create the `block hash` and push the block into the chain array. Don't for get
+   * create the `block hash` and push the block into the chain array. Don't forget
    * to update the `this.height`
    * Note: the symbol `_` in the method name indicates in the javascript convention
    * that this method is a private method.
@@ -64,7 +64,11 @@ class Blockchain {
     let self = this;
 
     return new Promise(async (resolve, reject) => {
-      if (!self.hight) {
+      // TODO: decide when to reject and why
+      // return reject(Error('Error ...'));
+      console.log(self.chain.length);
+      console.log(self.height);
+      if (self.chain.length === 0) {
         block.time = new Date().getTime().toString().slice(0, -3);
         block.height = 0;
         let hash = SHA256(JSON.stringify(block)).toString();
@@ -73,11 +77,23 @@ class Blockchain {
         this.chain.push(block);
         return resolve(self);
       } else {
-        // TODO: add new custom block funtionality
+        block.time = new Date().getTime().toString().slice(0, -3);
+        let previousBlock = self.chain.find(
+          (block) => block.height === self.height
+        );
+        if (!previousBlock || !previousBlock.hash) {
+          console.log('no previous block');
+        } else {
+          block.previousBlockHash = previousBlock.hash;
+        }
+        block.height = self.height + 1;
+        let hash = SHA256(JSON.stringify(block)).toString();
+        block.hash = hash;
+        this.chain.push(block);
+        self.height += 1;
+        resolve(block);
       }
     });
-
-    //     return reject(Error('Error generation hash'));
   }
 
   /**
@@ -101,7 +117,7 @@ class Blockchain {
    * 1. Get the time from the message sent as a parameter example: `parseInt(message.split(':')[1])`
    * 2. Get the current time: `let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));`
    * 3. Check if the time elapsed is less than 5 minutes
-   * 4. Veify the message with wallet address and signature: `bitcoinMessage.verify(message, address, signature)`
+   * 4. Verify the message with wallet address and signature: `bitcoinMessage.verify(message, address, signature)`
    * 5. Create the block and add it to the chain
    * 6. Resolve with the block added.
    * @param {*} address
@@ -111,7 +127,24 @@ class Blockchain {
    */
   submitStar(address, message, signature, star) {
     let self = this;
-    return new Promise(async (resolve, reject) => {});
+    return new Promise(async (resolve, reject) => {
+      // TODO: Do all this
+      /**
+       * 1. Get the time from the message sent as a parameter example: `parseInt(message.split(':')[1])`
+       * 2. Get the current time: `let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));`
+       * 3. Check if the time elapsed is less than 5 minutes
+       * 4. Verify the message with wallet address and signature: `bitcoinMessage.verify(message, address, signature)`
+       * */
+      let blockData = {
+        address: address,
+        message: message,
+        signature: signature,
+        star: star
+      };
+      let block = new BlockClass.Block({ data: blockData });
+      let createdBlock = await this._addBlock(block);
+      return resolve(createdBlock);
+    });
   }
 
   /**

@@ -36,6 +36,7 @@ class Block {
    */
   validate() {
     let self = this;
+    console.log('validating');
     return new Promise((resolve, reject) => {
       // Save in auxiliary variable the current block hash
       // Recalculate the hash of the Block
