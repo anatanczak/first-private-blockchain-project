@@ -102,10 +102,19 @@ class Blockchain {
    * sign it with your Bitcoin Wallet (Electrum or Bitcoin Core)
    * This is the first step before submit your Block.
    * The method return a Promise that will resolve with the message to be signed
+   * Return this message: <WALLET_ADRESS>:${new Date().getTime().toString().slice(0,-3)}:starRegistry
+   * You will need to replace <WALLET_ADDRESS> with the wallet address submitted
+   * by the requestor and the time in your message will allow you to validate the 5 minutes time window.
    * @param {*} address
    */
   requestMessageOwnershipVerification(address) {
-    return new Promise((resolve) => {});
+    return new Promise((resolve) => {
+      const message = `${address}:${new Date()
+        .getTime()
+        .toString()
+        .slice(0, -3)}:starRegistry`;
+      return resolve(message);
+    });
   }
 
   /**
