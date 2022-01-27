@@ -66,8 +66,6 @@ class Blockchain {
     return new Promise(async (resolve, reject) => {
       // TODO: decide when to reject and why
       // return reject(Error('Error ...'));
-      console.log(self.chain.length);
-      console.log(self.height);
       if (self.chain.length === 0) {
         block.time = new Date().getTime().toString().slice(0, -3);
         block.height = 0;
@@ -137,22 +135,32 @@ class Blockchain {
   submitStar(address, message, signature, star) {
     let self = this;
     return new Promise(async (resolve, reject) => {
-      // TODO: Do all this
-      /**
-       * 1. Get the time from the message sent as a parameter example: `parseInt(message.split(':')[1])`
-       * 2. Get the current time: `let currentTime = parseInt(new Date().getTime().toString().slice(0, -3));`
-       * 3. Check if the time elapsed is less than 5 minutes
-       * 4. Verify the message with wallet address and signature: `bitcoinMessage.verify(message, address, signature)`
-       * */
-      let blockData = {
-        address: address,
-        message: message,
-        signature: signature,
-        star: star
-      };
-      let block = new BlockClass.Block({ data: blockData });
-      let createdBlock = await this._addBlock(block);
-      return resolve(createdBlock);
+      const messageComponents = message.split(':');
+      if (messageComponents.length === 3) {
+        const messageTime = parseInt(message.split(':')[1]);
+        let currentTime = parseInt(
+          new Date().getTime().toString().slice(0, -3)
+        );
+        if (messageTime && currentTime - messageTime < 300) {
+          if (!bitcoinMessage.verify(message, address, signature)) {
+            return reject('Bitcoin message unverified.');
+          } else {
+            let blockData = {
+              address: address,
+              message: message,
+              signature: signature,
+              star: star
+            };
+            let block = new BlockClass.Block({ data: blockData });
+            let createdBlock = await this._addBlock(block);
+            return resolve(createdBlock);
+          }
+        } else {
+          return reject('Incorrect time');
+        }
+      } else {
+        return reject('Incorrect message format');
+      }
     });
   }
 
