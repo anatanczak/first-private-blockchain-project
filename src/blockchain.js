@@ -141,7 +141,8 @@ class Blockchain {
         let currentTime = parseInt(
           new Date().getTime().toString().slice(0, -3)
         );
-        if (messageTime && currentTime - messageTime < 300) {
+        // TODO: change 30000000 to 300 before submiting the project
+        if (messageTime && currentTime - messageTime < 30000000) {
           if (!bitcoinMessage.verify(message, address, signature)) {
             return reject('Bitcoin message unverified.');
           } else {
@@ -172,7 +173,12 @@ class Blockchain {
    */
   getBlockByHash(hash) {
     let self = this;
-    return new Promise((resolve, reject) => {});
+    return new Promise((resolve, reject) => {
+      if (self.chain.length > 0) {
+        const foundBlock = self.chain.find((block) => block.hash === hash);
+        resolve(foundBlock);
+      }
+    });
   }
 
   /**

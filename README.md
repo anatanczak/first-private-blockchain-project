@@ -131,7 +131,7 @@ You can check in your terminal the the Express application is listening in the P
 - @param {_} address
   _/
 
-5. `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
+5. ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
    `submitStar(address, message, signature, star)`
    /\*\*
    - The submitStar(address, message, signature, star) method
@@ -150,7 +150,7 @@ You can check in your terminal the the Express application is listening in the P
    - @param {\*} signature
    - @param {_} star
      _/
-6. `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
+6. ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
    `getBlockByHash(hash)`
    /\*\*
    - This method will return a Promise that will resolve with the Block
