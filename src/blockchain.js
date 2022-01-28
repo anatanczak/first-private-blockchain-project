@@ -141,8 +141,7 @@ class Blockchain {
         let currentTime = parseInt(
           new Date().getTime().toString().slice(0, -3)
         );
-        // TODO: change 30000000 to 300 before submiting the project
-        if (messageTime && currentTime - messageTime < 30000000) {
+        if (messageTime && currentTime - messageTime < 300) {
           if (!bitcoinMessage.verify(message, address, signature)) {
             return reject('Bitcoin message unverified.');
           } else {
@@ -207,7 +206,22 @@ class Blockchain {
   getStarsByWalletAddress(address) {
     let self = this;
     let stars = [];
-    return new Promise((resolve, reject) => {});
+    return new Promise((resolve, reject) => {
+      if (self.chain.length > 0) {
+        self.chain.map((block) => {
+          block.getBData().then((data) => {
+            console.log(data);
+            if (data && data.address === address) {
+              stars.push({
+                owner: data.address,
+                star: data.star
+              });
+            }
+          });
+        });
+      }
+      resolve(stars);
+    });
   }
 
   /**
