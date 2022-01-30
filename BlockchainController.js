@@ -22,10 +22,10 @@ class BlockchainController {
     this.app.get('/block/height/:height', async (req, res) => {
       if (req.params.height) {
         const height = parseInt(req.params.height);
-        let block = await this.blockchain.getBlockByHeight(height);
-        if (block) {
+        try {
+          let block = await this.blockchain.getBlockByHeight(height);
           return res.status(200).json(block);
-        } else {
+        } catch {
           return res.status(404).send('Block Not Found!');
         }
       } else {

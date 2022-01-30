@@ -81,47 +81,49 @@ You can check in your terminal the the Express application is listening in the P
 
 ## What do I need to implement to satisfy my employer requirements?
 
-1. `block.js` file. In the `Block` class we are going to implement the method:
-   `validate()`.
-   /\*\*
-   - The `validate()` method will validate if the block has been tampered or not.
-   - Been tampered means that someone from outside the application tried to change
-   - values in the block data as a consecuence the hash of the block should be different.
-   - Steps:
-   - 1. Return a new promise to allow the method be called asynchronous.
-   - 2. Save the in auxiliary variable the current hash of the block (`this` represent the block object)
-   - 3. Recalculate the hash of the entire block (Use SHA256 from crypto-js library)
-   - 4. Compare if the auxiliary hash value is different from the calculated one.
-   - 5. Resolve true or false depending if it is valid or not.
-   - Note: to access the class values inside a Promise code you need to create an auxiliary value `let self = this;`
-     \*/
-2. `block.js` file. In the `Block` class we are going to implement the method:
-   `getBData()`.
-   /\*\*
-   _ Auxiliary Method to return the block body (decoding the data)
-   _ Steps: \*  
-    _ 1. Use hex2ascii module to decode the data
-   _ 2. Because data is a javascript object use JSON.parse(string) to get the Javascript Object
-   _ 3. Resolve with the data and make sure that you don't need to return the data for the `genesis block`
-   _ or Reject with an error.
-   \*/
-3. ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
-   `_addBlock(block)`.
-   /\*\*
-   _ \_addBlock(block) will store a block in the chain
-   _ @param {_} block
-   _ The method will return a Promise that will resolve with the block added
-   _ or reject if an error happen during the execution.
-   _ You will need to check for the height to assign the `previousBlockHash`,
-   _ assign the `timestamp` and the correct `height`...At the end you need to
-   _ create the `block hash` and push the block into the chain array. Don't for get
-   _ to update the `this.height`
-   _ Note: the symbol `_` in the method name indicates in the javascript convention
-   _ that this method is a private method.
-   _/
-4. ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
-   `requestMessageOwnershipVerification(address)`
-   /\*\*
+1.  ---------- DONE ----------`block.js` file. In the `Block` class we are going to implement the method:
+    `validate()`.
+    /\*\*
+
+- The `validate()` method will validate if the block has been tampered or not.
+- Been tampered means that someone from outside the application tried to change
+- values in the block data as a consecuence the hash of the block should be different.
+- Steps:
+- 1.  Return a new promise to allow the method be called asynchronous.
+- 2.  Save the in auxiliary variable the current hash of the block (`this` represent the block object)
+- 3.  Recalculate the hash of the entire block (Use SHA256 from crypto-js library)
+- 4.  Compare if the auxiliary hash value is different from the calculated one.
+- 5.  Resolve true or false depending if it is valid or not.
+- Note: to access the class values inside a Promise code you need to create an auxiliary value `let self = this;`
+  \*/
+
+2.  ---------- DONE ----------`block.js` file. In the `Block` class we are going to implement the method:
+    `getBData()`.
+    /\*\*
+    _ Auxiliary Method to return the block body (decoding the data)
+    _ Steps: \*  
+     _ 1. Use hex2ascii module to decode the data
+    _ 2. Because data is a javascript object use JSON.parse(string) to get the Javascript Object
+    _ 3. Resolve with the data and make sure that you don't need to return the data for the `genesis block`
+    _ or Reject with an error.
+    \*/
+3.  ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
+    `_addBlock(block)`.
+    /\*\*
+    _ \_addBlock(block) will store a block in the chain
+    _ @param {_} block
+    _ The method will return a Promise that will resolve with the block added
+    _ or reject if an error happen during the execution.
+    _ You will need to check for the height to assign the `previousBlockHash`,
+    _ assign the `timestamp` and the correct `height`...At the end you need to
+    _ create the `block hash` and push the block into the chain array. Don't for get
+    _ to update the `this.height`
+    _ Note: the symbol `_` in the method name indicates in the javascript convention
+    _ that this method is a private method.
+    _/
+4.  ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
+    `requestMessageOwnershipVerification(address)`
+    /\*\*
 
 - The requestMessageOwnershipVerification(address) method
 - will allow you to request a message that you will use to
@@ -158,22 +160,25 @@ You can check in your terminal the the Express application is listening in the P
    - Search on the chain array for the block that has the hash.
    - @param {_} hash
      _/
-7. `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
+7. ---------- DONE ---------- `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
    `getStarsByWalletAddress (address)`
    /\*\*
-   - This method will return a Promise that will resolve with an array of Stars objects existing in the chain
-   - and are belongs to the owner with the wallet address passed as parameter.
-   -
-   - @param {_} address
-     _/
-8. `blockchain.js` file. In the `Blockchain` class we are going to implement the method:
-   `validateChain()`
-   /\*\*
-   - This method will return a Promise that will resolve with the list of errors when validating the chain.
-   - Steps to validate:
-   - 1. You should validate each block using `validateBlock`
-   - 2. Each Block should check the with the previousBlockHash
-        \*/
+
+- This method will return a Promise that will resolve with an array of Stars objects existing in the chain
+- and are belongs to the owner with the wallet address passed as parameter.
+-
+- @param {_} address
+  _/
+
+8.  ---------- DONE ----------`blockchain.js` file. In the `Blockchain` class we are going to implement the method:
+    `validateChain()`
+    /\*\*
+
+- This method will return a Promise that will resolve with the list of errors when validating the chain.
+- Steps to validate:
+- 1.  You should validate each block using `validateBlock`
+- 2.  Each Block should check the with the previousBlockHash
+      \*/
 
 ## How to test your application functionalities?
 

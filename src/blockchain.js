@@ -64,8 +64,6 @@ class Blockchain {
     let self = this;
 
     return new Promise(async (resolve, reject) => {
-      // TODO: decide when to reject and why
-      // return reject(Error('Error ...'));
       if (self.chain.length === 0) {
         block.time = new Date().getTime().toString().slice(0, -3);
         block.height = 0;
@@ -188,11 +186,11 @@ class Blockchain {
   getBlockByHeight(height) {
     let self = this;
     return new Promise((resolve, reject) => {
-      let block = self.chain.filter((p) => p.height === height)[0];
+      let block = self.chain.find((chainBlock) => chainBlock.height === height);
       if (block) {
         resolve(block);
       } else {
-        resolve(null);
+        reject('Block Not Found!');
       }
     });
   }
@@ -207,19 +205,17 @@ class Blockchain {
     let self = this;
     let stars = [];
     return new Promise((resolve, reject) => {
-      if (self.chain.length > 0) {
-        self.chain.map((block) => {
-          block.getBData().then((data) => {
-            console.log(data);
-            if (data && data.address === address) {
-              stars.push({
-                owner: data.address,
-                star: data.star
-              });
-            }
-          });
+      self.chain.map((block) => {
+        block.getBData().then((data) => {
+          if (data && data.address === address) {
+            stars.push({
+              owner: data.address,
+              star: data.star
+            });
+          }
         });
-      }
+      });
+
       resolve(stars);
     });
   }
@@ -233,7 +229,35 @@ class Blockchain {
   validateChain() {
     let self = this;
     let errorLog = [];
-    return new Promise(async (resolve, reject) => {});
+    return new Promise(async (resolve, reject) => {
+      let previousBlockHash = '';
+      for (const block of self.chain) {
+        const blockIsValid = await block.validate();
+        if (!blockIsValid) {
+          errorLog.push({
+            error: 'Block data was tempered',
+            invalidBlock: block
+          });
+        } else {
+          previousBlockHash = block.previousBlockHash;
+          if (
+            block.height > 0 &&
+            block.previousBlockHash !== previousBlockHash
+          ) {
+            errorLog.push({
+              error:
+                "Previous block hash doesn't match the hash of the previous block",
+              hashOnPreviousBlock: previousBlockHash,
+              invalidBlock: block
+            });
+          }
+        }
+      }
+      if (errorLog.length > 0) {
+        reject(errorLog);
+      }
+      resolve('Chain is valid');
+    });
   }
 }
 
